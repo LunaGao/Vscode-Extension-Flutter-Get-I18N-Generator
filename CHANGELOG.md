@@ -8,4 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Initial release
 
-## [0.0.1] - 2014-05-31
+## [0.0.1] - 2023-7-9
+
+## [0.0.2] - 2023-7-9
+* fix alert message

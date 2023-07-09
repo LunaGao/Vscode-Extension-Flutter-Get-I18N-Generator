@@ -5,12 +5,16 @@ import csvParser = require('csv-parser');
 export function activate(context: vscode.ExtensionContext) {
 
 	let disposable = vscode.commands.registerCommand('fluttergeti18ngenerator.enableordisablefluttergeti18ngenerator', async () => {
-		vscode.window.showInformationMessage('Hello World from Maomishen!');
 		if (vscode.workspace.workspaceFolders) {
 			const value = await vscode.window.showQuickPick(['Enable', 'Disable'], { placeHolder: 'Select the flutter app_i18n.dart generate enable or disable.' });			
 			if (value) {
 				var saveValue = value === 'Enable' ? true : false;
 				await vscode.workspace.getConfiguration().update('conf.flutter.i18ncsv.enable', saveValue, vscode.ConfigurationTarget.Workspace);
+				if (saveValue) {
+					vscode.window.showInformationMessage('Enable app_i18n.dart auto generate!');
+				} else {
+					vscode.window.showInformationMessage('Disable app_i18n.dart auto generate!');
+				}
 			}
 		}
 	});
@@ -41,14 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 					await saveDartFile(dartFileUri, content);
 					return new Promise<void>(resolve => {resolve();});
 				});
-				// vscode.window.showInformationMessage('app_i18n');
 			}
-
-			// console.log('File fileName:', document.fileName);
-			// console.log('File languageId:', document.languageId);
-			// if (document.languageId === 'csv') {
-			// 	console.log('File saved:', document.fileName);
-			// }
 		}
     });
 
