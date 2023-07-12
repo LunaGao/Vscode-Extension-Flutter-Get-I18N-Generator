@@ -72,7 +72,8 @@ async function saveDartFile(fileUri: vscode.Uri, content: string) {
 }
 
 function generateDartFile(content: object[]): string{
-	const templateFile = 'import \'package:get/get.dart\';\n\n\
+	const templateFile = 'import \'package:flutter/material.dart\';\n\
+import \'package:get/get.dart\';\n\n\
 class AppI18N extends Translations \{\n\
   @override\n\
   Map<String, Map<String, String>> get keys => \{\n\
@@ -81,6 +82,31 @@ class AppI18N extends Translations \{\n\
   Map<String, String> get key2DisplayValue => {\n\
 @list_display_value\n\
       };\n\
+\n\
+  Locale getSelectLocale() {\n\
+    String languageCode = \'\';\n\
+    String countryCode = \'\';\n\
+    if (Get.locale != null) {\n\
+      languageCode = Get.locale!.languageCode;\n\
+      countryCode = Get.locale!.countryCode ?? "";\n\
+    } else {\n\
+      if (Get.deviceLocale != null) {\n\
+        languageCode = Get.deviceLocale!.languageCode;\n\
+        countryCode = Get.deviceLocale!.countryCode ?? "";\n\
+      } else {\n\
+        languageCode = \'en\';\n\
+        countryCode = \'US\';\n\
+      }\n\
+    }\n\
+    if (AppI18N()\n\
+        .key2DisplayValue\n\
+        .keys\n\
+        .contains(\'${languageCode}_$countryCode\')) {\n\
+      return Locale(languageCode, countryCode);\n\
+    } else {\n\
+      return const Locale(\'en\', \'US\');\n\
+    }\n\
+  }\n\
 }\n\
 ';
 	const templateLanguage = '        \'@language\': {\n\
