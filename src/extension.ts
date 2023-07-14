@@ -98,7 +98,7 @@ class AppI18N extends Translations \{\n\
         countryCode = \'US\';\n\
       }\n\
     }\n\
-	if (AppI18N()\n\
+    if (AppI18N()\n\
         .key2DisplayValue\n\
         .keys\n\
         .contains(\'${languageCode}_$countryCode\')) {\n\
