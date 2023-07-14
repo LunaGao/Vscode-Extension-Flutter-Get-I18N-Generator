@@ -98,14 +98,18 @@ class AppI18N extends Translations \{\n\
         countryCode = \'US\';\n\
       }\n\
     }\n\
-    if (AppI18N()\n\
+	if (AppI18N()\n\
         .key2DisplayValue\n\
         .keys\n\
         .contains(\'${languageCode}_$countryCode\')) {\n\
       return Locale(languageCode, countryCode);\n\
-    } else {\n\
-      return const Locale(\'en\', \'US\');\n\
     }\n\
+    for (var item in AppI18N().key2DisplayValue.keys) {\n\
+      if (item.split(\'_\')[0] == languageCode) {\n\
+        return Locale(languageCode, item.split(\'_\')[1]);\n\
+      }\n\
+    }\n\
+    return const Locale(\'en\', \'US\');\n\
   }\n\
 }\n\
 ';
