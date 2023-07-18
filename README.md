@@ -22,6 +22,12 @@ None
 
 ## Release Notes
 
+### 0.0.6
+
+Add `List<Locale> supportedLocales` function.
+
+---
+
 ### 0.0.1
 
 Init

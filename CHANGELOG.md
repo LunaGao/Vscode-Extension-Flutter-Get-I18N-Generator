@@ -12,3 +12,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.0.2] - 2023-7-9
 * fix alert message
+
+## [0.0.6] - 2023-7-18
+* Add `List<Locale> supportedLocales` function.

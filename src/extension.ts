@@ -83,6 +83,10 @@ class AppI18N extends Translations \{\n\
 @list_display_value\n\
       };\n\
 \n\
+  List<Locale> supportedLocales = \[\n\
+@list_supportedLocales_value\n\
+  ];\n\
+\n\
   Locale getSelectLocale() {\n\
     String languageCode = \'\';\n\
     String countryCode = \'\';\n\
@@ -121,6 +125,8 @@ class AppI18N extends Translations \{\n\
 	@item';
 	const templateDisplayValue = '        \'@key\': \'@value\',\n\
 @list_display_value';
+	const templateListSupportedLocalesValue = '    const Locale(\'@key\', \'@value\'),\n\
+@list_supportedLocales_value';
 
 	var currentFile = templateFile;
 	const keys = content[0] as string[];
@@ -132,8 +138,14 @@ class AppI18N extends Translations \{\n\
 		currentDisplayValue = currentDisplayValue.replace('@key', language);
 		currentDisplayValue = currentDisplayValue.replace('@value', name);
 		currentFile = currentFile.replace("@list_display_value", currentDisplayValue);
+
+		var currentListSupportedLocalesValue = templateListSupportedLocalesValue;
+		currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@key', language.split('_')[0]);
+		currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@value', language.split('_')[1]);
+		currentFile = currentFile.replace("@list_supportedLocales_value", currentListSupportedLocalesValue);
 	}
 	currentFile = currentFile.replace("\n@list_display_value", "");
+	currentFile = currentFile.replace("\n@list_supportedLocales_value", "");
 	keys.forEach(element => {
 		if(element === 'key') { return; }
 		const language = element.split('|')[0];
