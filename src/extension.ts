@@ -79,14 +79,6 @@ export function activate(context: vscode.ExtensionContext) {
 					if (enableGenerate) {
 						const dartPath = document.fileName.substring(0, document.fileName.length - 3) + 'dart';
 						const dartFileUri = vscode.Uri.parse(dartPath);
-						progress.report({message: "Reading csv file..."});
-						var value : object[];
-						try {
-							value = await readAppi18nCSVFile(document.fileName);
-						} catch (ex){
-							vscode.window.showErrorMessage("Read app_i18n.csv file error!");
-							return new Promise<void>(resolve => {resolve();});
-						}
 						progress.report({message: "Generating dart file..."});
 						var content = generateDartFile(value);
 						progress.report({message: "Saving dart file..."});

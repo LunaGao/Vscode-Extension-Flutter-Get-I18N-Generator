@@ -74,6 +74,7 @@ class AppI18N extends Translations \{\n\
 	}
 	currentFile = currentFile.replace("\n@list_display_value", "");
 	currentFile = currentFile.replace("\n@list_supportedLocales_value", "");
+	//TODO: 这个foreach需要改成for循环，这里需要下标了，不是key了
 	keys.forEach(element => {
 		if(element === 'key') { return; }
 		const language = element.split('|')[0];
@@ -81,8 +82,8 @@ class AppI18N extends Translations \{\n\
 		currentLanguage = currentLanguage.replace("@language", language);
 		for (let index = 1; index < content.length; index++) {
 			var item = new Map(Object.entries(content[index]));
-			var currentKey = item.get('key') as string;
-			var currentValue = item.get(element) as string;
+			var currentKey = item.get('key') as string; // 这里要改，应该直接写0就可以，因为第一列就是key
+			var currentValue = item.get(element) as string; // 这里要改，需要写下标了，因为用language key去找已经找不到了
 			var currentKeyValue = templateKeyValue;
 			currentKeyValue = currentKeyValue.replace("@key", currentKey);
             currentKeyValue = currentKeyValue.replace("@value", currentValue);
