@@ -4,7 +4,7 @@
   "repository": "Generate app_i18n.dart file by app_i18n.csv file.",
   "description": "https://github.com/LunaGao/Vscode-Extension-Flutter-Get-I18N-Generator",
   "publisher": "LunaGao",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.80.0"
   },
