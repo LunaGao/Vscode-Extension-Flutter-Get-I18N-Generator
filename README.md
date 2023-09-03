@@ -20,19 +20,28 @@ So you need to have an API Key from [https://rapidapi.com](https://rapidapi.com)
 
 Include if your extension adds any VS Code settings through the `fluttergeti18ngenerator.enableordisablefluttergeti18ngenerator` extension point.
 
-`Flutter Enable/Disable app_i18n.csv Generator`
-`Flutter Enable/Disable app_i18n.csv Translate`
-`Flutter Set Microsoft Translate Rapid Api Key`
+* `Flutter Enable/Disable app_i18n.csv Generator`
+* `Flutter Enable/Disable app_i18n.csv Translate`
+* `Flutter Set Microsoft Translate Rapid Api Key`
+
+## For developer
+[publish](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 
 ## Known Issues
 
 None
 
 ## Release Notes
+### 0.0.8
 
+Fix app_i18n.dart getSelectLocale logic error.
+
+---
 ### 0.0.7
 
 Add Translate function by Rapid's Microsoft Translate api.
+
+---
 
 ### 0.0.6
 

@@ -16,5 +16,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.0.6] - 2023-7-18
 * Add `List<Locale> supportedLocales` function.
 
-## [0.0.6] - 2023-9-2
+## [0.0.7] - 2023-9-2
 * Add Translate function by Rapid's Microsoft Translate api.
+
+### [0.0.8] - 2023-9-3
+
+Fix app_i18n.dart getSelectLocale logic error.

@@ -17,18 +17,18 @@ class AppI18N extends Translations \{\n\
   Locale getSelectLocale() {\n\
     String languageCode = \'\';\n\
     String countryCode = \'\';\n\
-    if (Get.locale != null) {\n\
-      languageCode = Get.locale!.languageCode;\n\
-      countryCode = Get.locale!.countryCode ?? "";\n\
-    } else {\n\
-      if (Get.deviceLocale != null) {\n\
-        languageCode = Get.deviceLocale!.languageCode;\n\
-        countryCode = Get.deviceLocale!.countryCode ?? "";\n\
-      } else {\n\
-        languageCode = \'en\';\n\
-        countryCode = \'US\';\n\
-      }\n\
-    }\n\
+	if (Get.deviceLocale != null) {\n\
+		languageCode = Get.deviceLocale!.languageCode;\n\
+		countryCode = Get.deviceLocale!.countryCode ?? "";\n\
+	} else {\n\
+		if (Get.locale != null) {\n\
+			languageCode = Get.locale!.languageCode;\n\
+			countryCode = Get.locale!.countryCode ?? "";\n\
+		} else {\n\
+			languageCode = \'en\';\n\
+			countryCode = \'US\';\n\
+		}\n\
+	}\n\
     if (AppI18N()\n\
         .key2DisplayValue\n\
         .keys\n\
