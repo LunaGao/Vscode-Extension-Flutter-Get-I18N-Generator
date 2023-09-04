@@ -20,6 +20,9 @@ class AppI18N extends Translations \{\n\
 	if (Get.deviceLocale != null) {\n\
 		languageCode = Get.deviceLocale!.languageCode;\n\
 		countryCode = Get.deviceLocale!.countryCode ?? "";\n\
+		if (languageCode == \'zh\') {\n\
+			countryCode = Get.deviceLocale!.scriptCode!;\n\
+		}\n\
 	} else {\n\
 		if (Get.locale != null) {\n\
 			languageCode = Get.locale!.languageCode;\n\

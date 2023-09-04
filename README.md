@@ -3,11 +3,12 @@
 Generate app_i18n.dart file by app_i18n.csv file. For [GetX](https://pub.dev) plugin.
 You can check [here](https://pub.dev/packages/get#internationalization) to learn how to use it.
 
+## example csv file
+[here](./example.csv)
+
 ## Features
 
 Generate app_i18n.dart file by app_i18n.csv file.
-
-Max language transtlate count is 20.
 
 ## Requirements
 
@@ -32,6 +33,13 @@ Include if your extension adds any VS Code settings through the `fluttergeti18ng
 None
 
 ## Release Notes
+
+### [0.0.9] - 2023-9-4
+
+Fix app_i18n.dart zh-Hant and zh-Hans error.
+
+---
+
 ### 0.0.8
 
 Fix app_i18n.dart getSelectLocale logic error.

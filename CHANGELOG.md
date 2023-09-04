@@ -22,3 +22,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### [0.0.8] - 2023-9-3
 
 Fix app_i18n.dart getSelectLocale logic error.
+
+### [0.0.9] - 2023-9-4
+
+Fix app_i18n.dart zh-Hant and zh-Hans error.
