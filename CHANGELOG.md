@@ -26,3 +26,7 @@ Fix app_i18n.dart getSelectLocale logic error.
 ### [0.0.9] - 2023-9-4
 
 Fix app_i18n.dart zh-Hant and zh-Hans error.
+
+### [0.0.10] - 2023-9-4
+
+Add iOS native i18n sync function.

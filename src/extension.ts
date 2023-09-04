@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { generateDartFile } from './generator';
 import { readAppi18nCSVFile, saveDartFile } from './csv_and_dart_filesystem';
 import { translateCSVFile } from './rapid_translate';
+import { GeneratorIOS } from './ios/ios_generator';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -57,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.withProgress(options, async (progress, token) => {
 					var value : object[];
 					try {
-						value = await readAppi18nCSVFile(document.fileName);
+						value = await readAppi18nCSVFile(document.uri);
 					} catch (ex){
 						vscode.window.showErrorMessage("Read app_i18n.csv file error!");
 						return new Promise<void>(resolve => {resolve();});
@@ -90,10 +91,32 @@ export function activate(context: vscode.ExtensionContext) {
 		}
     });
 
+	let generateiOSI18n = vscode.commands.registerCommand('fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratoriosi18n', async () => {
+		const options = {
+			location: vscode.ProgressLocation.Notification,
+			title: "Flutter i18n Generator",
+			cancellable: false,
+		};
+		vscode.window.withProgress(options, async (progress, token) => {
+			progress.report({message: "Generating iOS i18n..."});
+			try {
+				let generateiOSI18n = new GeneratorIOS();
+				var value = await readAppi18nCSVFile(generateiOSI18n.i18nCSVFile);
+				await generateiOSI18n.generateIOSRunnerI18n(value);
+				await generateiOSI18n.generateIOSFastlaneMetadataTitle(value);
+			} catch (ex) {
+				console.log(ex);
+				vscode.window.showErrorMessage("Generating iOS i18n error!");
+			}
+			return new Promise<void>(resolve => {resolve();});
+		});
+	});
+
 	context.subscriptions.push(enableDartGenerator);
 	context.subscriptions.push(enableCSVTranslate);
 	context.subscriptions.push(setCSVTranslateRapidMicrosoftApiKey);
 	context.subscriptions.push(enableDartGeneratorCSV);
+	context.subscriptions.push(generateiOSI18n);
 }
 
 export function deactivate() {}

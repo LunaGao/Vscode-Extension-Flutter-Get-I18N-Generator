@@ -4,7 +4,7 @@
   "repository": "Generate app_i18n.dart file by app_i18n.csv file.",
   "description": "https://github.com/LunaGao/Vscode-Extension-Flutter-Get-I18N-Generator",
   "publisher": "LunaGao",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -28,6 +28,10 @@
       {
         "command": "fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratortranslatekeyrapidmicrosoft",
         "title": "Flutter Set Microsoft Translate Rapid Api Key"
+      },
+      {
+        "command": "fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratoriosi18n",
+        "title": "Flutter i18n generate iOS i18n"
       }
     ],
     "configuration": {

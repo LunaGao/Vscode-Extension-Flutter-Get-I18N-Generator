@@ -20,6 +20,7 @@ Translate using [Microsoft Translator Text](https://rapidapi.com/microsoft-azure
 
 So you need to have an API Key from [https://rapidapi.com](https://rapidapi.com)
 
+`Flutter i18n generate iOS i18n` command need setup iOS project native i18n first.
 
 ## Extension Settings
 
@@ -28,6 +29,7 @@ Include if your extension adds any VS Code settings through the `fluttergeti18ng
 * `Flutter Enable/Disable app_i18n.csv Generator`
 * `Flutter Enable/Disable app_i18n.csv Translate`
 * `Flutter Set Microsoft Translate Rapid Api Key`
+* `Flutter i18n generate iOS i18n`
 
 ## For developer
 [publish](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
@@ -37,6 +39,12 @@ Include if your extension adds any VS Code settings through the `fluttergeti18ng
 None
 
 ## Release Notes
+
+### [0.0.10] - 2023-9-4
+
+Add iOS native i18n sync function.
+
+---
 
 ### [0.0.9] - 2023-9-4
 
