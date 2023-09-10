@@ -55,7 +55,9 @@ class AppI18N extends Translations \{\n\
 	@item';
 	const templateDisplayValue = '        \'@key\': \'@value\',\n\
 @list_display_value';
-	const templateListSupportedLocalesValue = '    const Locale(\'@key\', \'@value\'),\n\
+	const templateListSupportedLocalesValueOne = '    const Locale(\'@key\'),\n\
+@list_supportedLocales_value';
+	const templateListSupportedLocalesValueTwo = '    const Locale(\'@key\', \'@value\'),\n\
 @list_supportedLocales_value';
 
 	var currentFile = templateFile;
@@ -69,10 +71,16 @@ class AppI18N extends Translations \{\n\
 		currentDisplayValue = currentDisplayValue.replace('@key', language);
 		currentDisplayValue = currentDisplayValue.replace('@value', name);
 		currentFile = currentFile.replace("@list_display_value", currentDisplayValue);
-
-		var currentListSupportedLocalesValue = templateListSupportedLocalesValue;
-		currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@key', language.split('_')[0]);
-		currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@value', language.split('_')[1]);
+		var currentListSupportedLocalesValue = '';
+		if (language.split('_').length >= 2) {
+			currentListSupportedLocalesValue = templateListSupportedLocalesValueTwo;
+			currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@key', language.split('_')[0]);
+			currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@value', language.split('_')[1]);
+		} else {
+			currentListSupportedLocalesValue = templateListSupportedLocalesValueOne;
+			currentListSupportedLocalesValue = currentListSupportedLocalesValue.replace('@key', language);
+		}
+		
 		currentFile = currentFile.replace("@list_supportedLocales_value", currentListSupportedLocalesValue);
 	}
 	currentFile = currentFile.replace("\n@list_display_value", "");
@@ -85,9 +93,10 @@ class AppI18N extends Translations \{\n\
 		for (let rowIndex = 1; rowIndex < content.length; rowIndex++) {
 			var item = content[rowIndex] as Array<string>;
 			var currentKey = item[0] as string;
+			currentKey = currentKey.split('[')[0];
 			var currentValue = item[columnIndex] as string;
 			var currentKeyValue = templateKeyValue;
-			currentValue = currentValue.replace("'", "\\'");
+			currentValue = currentValue.replaceAll("'", "\\'");
 			currentKeyValue = currentKeyValue.replace("@key", currentKey);
             currentKeyValue = currentKeyValue.replace("@value", currentValue);
             currentLanguage = currentLanguage.replace("@item", currentKeyValue);

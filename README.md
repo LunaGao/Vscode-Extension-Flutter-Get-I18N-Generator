@@ -40,6 +40,12 @@ None
 
 ## Release Notes
 
+### [0.1.0] - 2023-9-9
+
+Add app_i18n.csv key column [ignore] tag for translate function.
+
+---
+
 ### [0.0.10] - 2023-9-4
 
 Add iOS native i18n sync function.
