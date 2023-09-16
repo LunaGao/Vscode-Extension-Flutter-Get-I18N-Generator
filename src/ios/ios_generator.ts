@@ -23,7 +23,7 @@ export class GeneratorIOS {
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
             let row = value[rowIndex] as String[];
-            if (row[0] === 'title') {
+            if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
         }
@@ -69,7 +69,7 @@ export class GeneratorIOS {
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
             let row = value[rowIndex] as String[];
-            if (row[0] === 'title') {
+            if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
         }

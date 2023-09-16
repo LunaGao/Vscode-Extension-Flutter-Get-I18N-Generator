@@ -35,3 +35,6 @@ Add iOS native i18n sync function.
 
 Add app_i18n.csv key column [ignore] tag for translate function.
 Fix app_i18n.csv generate to dart file error.
+
+### [0.1.1] - 2023-9-16
+Fix app_i18n.csv generate to dart file error.
