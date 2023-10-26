@@ -79,7 +79,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 					if (enableGenerate) {
 						const dartPath = document.fileName.substring(0, document.fileName.length - 3) + 'dart';
-						const dartFileUri = vscode.Uri.parse(dartPath);
+						const dartFileUri = vscode.Uri.file(dartPath);
 						progress.report({message: "Generating dart file..."});
 						var content = generateDartFile(value);
 						progress.report({message: "Saving dart file..."});

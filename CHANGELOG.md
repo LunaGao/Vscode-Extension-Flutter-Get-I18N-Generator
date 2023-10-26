@@ -38,3 +38,6 @@ Fix app_i18n.csv generate to dart file error.
 
 ### [0.1.1] - 2023-9-16
 Fix app_i18n.csv generate to dart file error.
+
+### [0.1.2] - 2023-10-26
+Fix Windows can not generate app_i18n.dart file error.
