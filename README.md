@@ -10,10 +10,6 @@ title,Hello,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
 ```
 
-## Features
-
-Generate app_i18n.dart file by app_i18n.csv file.
-
 ## Requirements
 
 Translate using [Microsoft Translator Text](https://rapidapi.com/microsoft-azure-org-microsoft-cognitive-services/api/microsoft-translator-text/) by Rapid Api.
