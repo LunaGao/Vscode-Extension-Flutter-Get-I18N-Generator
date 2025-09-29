@@ -44,3 +44,6 @@ Fix Windows can not generate app_i18n.dart file error.
 
 ### [0.1.3] - 2023-10-26
 Fix a little bug.
+
+### [0.1.4] - 2025-09-29
+Fix first open app in Chinese language will always display Hant error.

@@ -17,10 +17,11 @@ class AppI18N extends Translations \{\n\
     if (Get.deviceLocale != null) {\n\
       languageCode = Get.deviceLocale!.languageCode;\n\
       if (languageCode == \'zh\') {\n\
-        if (Get.deviceLocale!.scriptCode? == \'Hant\') {\n\
-          countryCode = \'TW\';\n\
+        if (Get.deviceLocale!.scriptCode != null &&\n\
+            Get.deviceLocale!.scriptCode != \'CN\') {\n\
+          countryCode = \'Hant\';\n\
         } else {\n\
-          countryCode = \'CN\';\n\
+          countryCode = \'Hans\';\n\
         }\n\
       }\n\
     }\n\
