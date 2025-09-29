@@ -12,31 +12,19 @@ class AppI18N extends Translations \{\n\
 \n\
 \n\
   Locale getSelectLocale() {\n\
-    String languageCode = \'en\';\n\
-    String countryCode = \'undefined\';\n\
-    if (Get.deviceLocale != null) {\n\
-      languageCode = Get.deviceLocale!.languageCode;\n\
-      if (languageCode == \'zh\') {\n\
-        if (Get.deviceLocale!.scriptCode != null &&\n\
-            Get.deviceLocale!.scriptCode != \'CN\') {\n\
-          countryCode = \'Hant\';\n\
+    var locale = Get.deviceLocale;\n\
+    if (locale == null) {\n\
+      return Locale(\'en\', \'US\');\n\
+    } else {\n\
+      if (locale.languageCode == \'zh\') {\n\
+        if (locale.scriptCode == \'Hant\') {\n\
+          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hant\');\n\
         } else {\n\
-          countryCode = \'Hans\';\n\
+          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hans\');\n\
         }\n\
       }\n\
+      return locale;\n\
     }\n\
-    for (var item in AppI18N().key2DisplayValue.keys) {\n\
-      if (countryCode == \'undefined\') {\n\
-        if (item.startsWith(languageCode)) {\n\
-          return Locale(languageCode);\n\
-        }\n\
-      } else {\n\
-        if (item.endsWith(countryCode)) {\n\
-          return Locale(languageCode, countryCode);\n\
-        }\n\
-      }\n\
-    }\n\
-    return Locale(languageCode);\n\
   }\n\
 }\n\
 ';

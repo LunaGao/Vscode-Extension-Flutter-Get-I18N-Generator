@@ -47,3 +47,6 @@ Fix a little bug.
 
 ### [0.1.4] - 2025-09-29
 Fix first open app in Chinese language will always display Hant error.
+
+### [0.1.5] - 2025-09-29
+Try other get device locale function.
