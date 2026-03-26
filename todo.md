@@ -80,7 +80,7 @@
  `generateDartFile()` 的转义和 locale 输出；
  `GeneratorIOS` 的语言匹配与文件写入。
 
-- [ ] 打开更严格的 TypeScript 编译选项  
+- [x] 打开更严格的 TypeScript 编译选项  
 涉及：`tsconfig.json`  
 建议逐步启用：
  `noImplicitReturns`
