@@ -52,7 +52,7 @@
  用户提示层；
  保存触发器执行层。
 
-- [ ] iOS 语言映射逻辑应统一封装，减少三段重复查找  
+- [x] iOS 语言映射逻辑应统一封装，减少三段重复查找  
 涉及：`src/ios/ios_generator.ts`  
 当前 Runner 和 Fastlane 都在做相似的 locale 匹配，而且 fallback 规则分散。建议抽成统一函数，集中处理：
  `zh_CN -> zh-CN`

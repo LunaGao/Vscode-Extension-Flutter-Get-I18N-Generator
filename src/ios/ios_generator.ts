@@ -3,6 +3,11 @@ import { readUtf8File, validateAppI18nCSVContent } from '../csv_and_dart_filesys
 import { logError, logInfo } from '../output';
 import { CsvRow, CsvTable } from '../types';
 
+type LanguageColumnMatch = {
+    columnIndex: number;
+    csvLocale: string;
+    strategy: 'exact' | 'language' | 'region';
+};
 
 export class GeneratorIOS {
     i18nCSVFile: vscode.Uri;
@@ -19,6 +24,46 @@ export class GeneratorIOS {
         this.i18nCSVFile = vscode.Uri.joinPath(folders![0].uri, "lib/i18n/app_i18n.csv");
         this.iOSRunnerFolder = vscode.Uri.joinPath(folders![0].uri, "ios/Runner");
         this.iOSFastlaneMetadataFolder = vscode.Uri.joinPath(folders![0].uri, "ios/fastlane/metadata");
+    }
+
+    private normalizeLocale(locale: string): string {
+        return locale.replace('_', '-').toLowerCase();
+    }
+
+    private getCsvLocale(header: string): string {
+        return header.split('|')[0];
+    }
+
+    private getLanguageCode(locale: string): string {
+        return this.normalizeLocale(locale).split('-')[0];
+    }
+
+    private findLanguageColumnMatch(localeName: string, keys: CsvRow): LanguageColumnMatch | undefined {
+        const normalizedLocaleName = this.normalizeLocale(localeName);
+        const localeLanguageCode = this.getLanguageCode(localeName);
+
+        for (let columnIndex = 1; columnIndex < keys.length; columnIndex++) {
+            const csvLocale = this.getCsvLocale(keys[columnIndex]);
+            if (normalizedLocaleName === this.normalizeLocale(csvLocale)) {
+                return { columnIndex, csvLocale, strategy: 'exact' };
+            }
+        }
+
+        for (let columnIndex = 1; columnIndex < keys.length; columnIndex++) {
+            const csvLocale = this.getCsvLocale(keys[columnIndex]);
+            if (normalizedLocaleName === this.getLanguageCode(csvLocale)) {
+                return { columnIndex, csvLocale, strategy: 'language' };
+            }
+        }
+
+        for (let columnIndex = 1; columnIndex < keys.length; columnIndex++) {
+            const csvLocale = this.getCsvLocale(keys[columnIndex]);
+            if (localeLanguageCode === this.getLanguageCode(csvLocale)) {
+                return { columnIndex, csvLocale, strategy: 'region' };
+            }
+        }
+
+        return undefined;
     }
 
     async generateIOSRunnerI18n(value : CsvTable): Promise<void> {
@@ -40,28 +85,8 @@ export class GeneratorIOS {
                 if (name === 'Base') {
                     continue;
                 }
-                var isFound = false;
-                for (let columnIndex = 0; columnIndex < keys.length; columnIndex++) {
-                    var element = keys[columnIndex];
-                    var keyName = element.split("|")[0].replace("_", "-");
-                    if (name === keyName) {
-                        await this.saveTitleIntoStringsFile(name, value[titleRowIndex][columnIndex]);
-                        isFound = true;
-                        break;
-                    }
-                }
-                if (!isFound) {
-                    for (let columnIndex = 0; columnIndex < keys.length; columnIndex++) {
-                        var element = keys[columnIndex];
-                        var keyName = element.split("|")[0].split('_')[0];
-                        if (name === keyName) {
-                            await this.saveTitleIntoStringsFile(name, value[titleRowIndex][columnIndex]);
-                            isFound = true;
-                            break;
-                        }
-                    }
-                }
-                if (!isFound) {
+                const match = this.findLanguageColumnMatch(name, keys);
+                if (match === undefined) {
                     const error = new Error("Language not found: " + name);
                     logError('iOS Runner Sync', error, {
                         file: this.i18nCSVFile,
@@ -69,6 +94,7 @@ export class GeneratorIOS {
                     });
                     throw error;
                 }
+                await this.saveTitleIntoStringsFile(name, value[titleRowIndex][match.columnIndex]);
             }
         }
     }
@@ -95,51 +121,8 @@ export class GeneratorIOS {
                 if (name === 'review_information') {
                     continue;
                 }
-                var isFound = false;
-                for (let columnIndex = 0; columnIndex < keys.length; columnIndex++) {
-                    var element = keys[columnIndex];
-                    var keyName = element.split("|")[0].replace("_", "-");
-                    if (name === keyName) {
-                        logInfo('Fastlane Metadata Sync', 'Matched metadata locale.', {
-                            file: this.i18nCSVFile,
-                            details: [`Locale: ${keyName} -> ${name}`],
-                        });
-                        await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
-                        isFound = true;
-                        break;
-                    }
-                }
-                if (!isFound) {
-                    for (let columnIndex = 0; columnIndex < keys.length; columnIndex++) {
-                        var element = keys[columnIndex];
-                        var keyName = element.split("|")[0].split('_')[0];
-                        if (name === keyName) {
-                            logInfo('Fastlane Metadata Sync', 'Matched metadata locale via language fallback.', {
-                                file: this.i18nCSVFile,
-                                details: [`Locale: ${keyName} -> ${name}`],
-                            });
-                            await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
-                            isFound = true;
-                            break;
-                        }
-                    }
-                }
-                if (!isFound) {
-                    for (let columnIndex = 0; columnIndex < keys.length; columnIndex++) {
-                        var element = keys[columnIndex];
-                        var keyName = element.split("|")[0].split('_')[0];
-                        if (name.split('-')[0] === keyName) {
-                            logInfo('Fastlane Metadata Sync', 'Matched metadata locale via region fallback.', {
-                                file: this.i18nCSVFile,
-                                details: [`Locale: ${keyName} -> ${name}`],
-                            });
-                            await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
-                            isFound = true;
-                            break;
-                        }
-                    }
-                }
-                if (!isFound) {
+                const match = this.findLanguageColumnMatch(name, keys);
+                if (match === undefined) {
                     const error = new Error("Language not found: " + name);
                     logError('Fastlane Metadata Sync', error, {
                         file: this.i18nCSVFile,
@@ -147,6 +130,11 @@ export class GeneratorIOS {
                     });
                     throw error;
                 }
+                logInfo('Fastlane Metadata Sync', `Matched metadata locale via ${match.strategy} strategy.`, {
+                    file: this.i18nCSVFile,
+                    details: [`Locale: ${match.csvLocale} -> ${name}`],
+                });
+                await this.saveMetadataNameFile(name, value[titleRowIndex][match.columnIndex]);
             }
         }
     }
