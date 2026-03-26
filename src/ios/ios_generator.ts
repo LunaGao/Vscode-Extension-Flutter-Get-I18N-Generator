@@ -66,6 +66,30 @@ export class GeneratorIOS {
         return undefined;
     }
 
+    private escapeInfoPlistStringValue(value: string): string {
+        return value
+            .replaceAll('\\', '\\\\')
+            .replaceAll('"', '\\"');
+    }
+
+    private updateCFBundleDisplayName(stringsContent: string, value: string): string {
+        const lineBreak = stringsContent.includes('\r\n') ? '\r\n' : '\n';
+        const lines = stringsContent.split(/\r?\n/);
+        const targetLineIndex = lines.findIndex((line) => line.includes('"CFBundleDisplayName"'));
+
+        if (targetLineIndex < 0) {
+            throw new Error('CFBundleDisplayName can not matched.');
+        }
+
+        const lineMatch = lines[targetLineIndex].match(/^(\s*"CFBundleDisplayName"\s*=\s*")([^"]*)(";.*)$/);
+        if (lineMatch === null) {
+            throw new Error('CFBundleDisplayName line format is invalid.');
+        }
+
+        lines[targetLineIndex] = `${lineMatch[1]}${this.escapeInfoPlistStringValue(value)}${lineMatch[3]}`;
+        return lines.join(lineBreak);
+    }
+
     async generateIOSRunnerI18n(value : CsvTable): Promise<void> {
         validateAppI18nCSVContent(value, { requireTitleRow: true });
         const keys: CsvRow = value[0];
@@ -141,22 +165,19 @@ export class GeneratorIOS {
 
     async saveTitleIntoStringsFile(stringsFileName: string, value: string) {
         var stringsFile = vscode.Uri.joinPath(this.iOSRunnerFolder, stringsFileName + ".lproj/InfoPlist.strings");
-        var stringsContent = await readUtf8File(stringsFile);
-        var regexp = /"CFBundleDisplayName"[ ]+=[ ]+"(.*)";/;
-        var groups = stringsContent.match(regexp);
-        if (groups?.length! >= 2) {
-            var cFBundleDisplayNameString = groups![0];
-            var preName = groups![1];
-            var newCFBundleDisplayNameString = cFBundleDisplayNameString.replace(preName, value.toString());
-            stringsContent = stringsContent.replace(cFBundleDisplayNameString, newCFBundleDisplayNameString);
-            await vscode.workspace.fs.writeFile(stringsFile, new TextEncoder().encode(stringsContent));
-        } else {
-            const error = new Error(stringsFile + " CFBundleDisplayName can not matched.");
-            logError('iOS Runner Sync', error, {
+        try {
+            const stringsContent = await readUtf8File(stringsFile);
+            const updatedContent = this.updateCFBundleDisplayName(stringsContent, value);
+            await vscode.workspace.fs.writeFile(stringsFile, new TextEncoder().encode(updatedContent));
+        } catch (error) {
+            const wrappedError = error instanceof Error
+                ? new Error(`${stringsFile.fsPath}: ${error.message}`)
+                : new Error(`${stringsFile.fsPath}: ${String(error)}`);
+            logError('iOS Runner Sync', wrappedError, {
                 file: stringsFile,
                 details: ['Failed module: iOS Runner Sync'],
             });
-            throw error;
+            throw wrappedError;
         }
     }
 
