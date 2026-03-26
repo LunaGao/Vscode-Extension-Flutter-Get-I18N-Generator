@@ -1,3 +1,13 @@
+function escapeDartString(value: string): string {
+	return value
+		.replaceAll('\\', '\\\\')
+		.replaceAll('\'', '\\\'')
+		.replaceAll('\r', '\\r')
+		.replaceAll('\n', '\\n')
+		.replaceAll('\t', '\\t')
+		.replaceAll('$', '\\$');
+}
+
 export function generateDartFile(content: object[]): string{
 	const templateFile = 'import \'package:flutter/material.dart\';\n\
 import \'package:get/get.dart\';\n\n\
@@ -45,8 +55,8 @@ class AppI18N extends Translations \{\n\
 		var name = keys[index].split('|')[1];
 		name = name.replace(/\[.*\]/, "");
 		var currentDisplayValue = templateDisplayValue;
-		currentDisplayValue = currentDisplayValue.replace('@key', language);
-		currentDisplayValue = currentDisplayValue.replace('@value', name);
+		currentDisplayValue = currentDisplayValue.replace('@key', escapeDartString(language));
+		currentDisplayValue = currentDisplayValue.replace('@value', escapeDartString(name));
 		currentFile = currentFile.replace("@list_display_value", currentDisplayValue);
 	}
 	currentFile = currentFile.replace("\n@list_display_value", "");
@@ -54,16 +64,15 @@ class AppI18N extends Translations \{\n\
 		if(keys[columnIndex] === 'key') { continue; }
 		const language = keys[columnIndex].split('|')[0];
 		var currentLanguage = templateLanguage;
-		currentLanguage = currentLanguage.replace("@language", language);
+		currentLanguage = currentLanguage.replace("@language", escapeDartString(language));
 		for (let rowIndex = 1; rowIndex < content.length; rowIndex++) {
 			var item = content[rowIndex] as Array<string>;
 			var currentKey = item[0] as string;
 			currentKey = currentKey.split('[')[0];
 			var currentValue = item[columnIndex] as string;
 			var currentKeyValue = templateKeyValue;
-			currentValue = currentValue.replaceAll("'", "\\'");
-			currentKeyValue = currentKeyValue.replace("@key", currentKey);
-            currentKeyValue = currentKeyValue.replace("@value", currentValue);
+			currentKeyValue = currentKeyValue.replace("@key", escapeDartString(currentKey));
+            currentKeyValue = currentKeyValue.replace("@value", escapeDartString(currentValue));
             currentLanguage = currentLanguage.replace("@item", currentKeyValue);
 		}
 		currentLanguage = currentLanguage.replace("@item", "");

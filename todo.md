@@ -8,7 +8,7 @@
 涉及：`src/csv_and_dart_filesystem.ts`、`src/ios/ios_generator.ts`  
 当前直接对 `vscode.workspace.fs.readFile()` 返回值调用 `.toString()`，这依赖运行时是否恰好返回 `Buffer`，实现上不稳。应统一改为 `new TextDecoder('utf-8').decode(bytes)` 或 `Buffer.from(bytes).toString('utf8')`，避免 CSV 和 iOS 字符串文件在不同环境下被错误解码。
 
-- [ ] 修复 Dart 代码生成中的字符串转义不完整问题  
+- [x] 修复 Dart 代码生成中的字符串转义不完整问题  
 涉及：`src/generator.ts`  
 现在只转义了单引号，没有处理反斜杠、换行、回车、`$` 插值符等情况。遇到特殊文本时，生成的 `app_i18n.dart` 可能直接编译失败或展示异常。建议抽出专门的 Dart string escape 方法。
 
