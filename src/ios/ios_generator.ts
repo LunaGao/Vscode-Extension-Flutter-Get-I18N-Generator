@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { readUtf8File, validateAppI18nCSVContent } from '../csv_and_dart_filesystem';
 import { logError, logInfo } from '../output';
-import { CsvRow, CsvTable } from '../types';
+import type { CsvRow, CsvTable } from '../types';
 
 type LanguageColumnMatch = {
     columnIndex: number;
@@ -14,7 +14,7 @@ export class GeneratorIOS {
     iOSRunnerFolder: vscode.Uri;
     iOSFastlaneMetadataFolder: vscode.Uri;
     constructor() {
-        let folders = vscode.workspace.workspaceFolders;
+        const folders = vscode.workspace.workspaceFolders;
         if (folders === undefined) {
             throw new Error("This function need to working in workspace.");
         }
@@ -93,18 +93,18 @@ export class GeneratorIOS {
     async generateIOSRunnerI18n(value : CsvTable): Promise<void> {
         validateAppI18nCSVContent(value, { requireTitleRow: true });
         const keys: CsvRow = value[0];
-        var titleRowIndex = 0;
+        let titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
             const row: CsvRow = value[rowIndex];
             if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
         }
-        let iOSRunnerFiles = await vscode.workspace.fs.readDirectory(this.iOSRunnerFolder);
+        const iOSRunnerFiles = await vscode.workspace.fs.readDirectory(this.iOSRunnerFolder);
         for (let fileIndex = 0; fileIndex < iOSRunnerFiles.length; fileIndex++ ) {
-            var file = iOSRunnerFiles[fileIndex];
-            let ext = file[0].split('.')[1];
-            var name = file[0].split('.')[0];
+            const file = iOSRunnerFiles[fileIndex];
+            const ext = file[0].split('.')[1];
+            const name = file[0].split('.')[0];
             if (ext === 'lproj') {
                 if (name === 'Base') {
                     continue;
@@ -126,17 +126,17 @@ export class GeneratorIOS {
     async generateIOSFastlaneMetadataTitle(value : CsvTable): Promise<void> {
         validateAppI18nCSVContent(value, { requireTitleRow: true });
         const keys: CsvRow = value[0];
-        var titleRowIndex = 0;
+        let titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
             const row: CsvRow = value[rowIndex];
             if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
         }
-        let iOSFastlaneMetadataFiles = await vscode.workspace.fs.readDirectory(this.iOSFastlaneMetadataFolder);
+        const iOSFastlaneMetadataFiles = await vscode.workspace.fs.readDirectory(this.iOSFastlaneMetadataFolder);
         for (let fileIndex = 0; fileIndex < iOSFastlaneMetadataFiles.length; fileIndex++ ) {
-            var file = iOSFastlaneMetadataFiles[fileIndex];
-            var name = file[0];
+            const file = iOSFastlaneMetadataFiles[fileIndex];
+            let name = file[0];
             // 'nb' -> 'no'
             if (name === 'no') {
                 name = 'nb';
@@ -164,7 +164,7 @@ export class GeneratorIOS {
     }
 
     async saveTitleIntoStringsFile(stringsFileName: string, value: string) {
-        var stringsFile = vscode.Uri.joinPath(this.iOSRunnerFolder, stringsFileName + ".lproj/InfoPlist.strings");
+        const stringsFile = vscode.Uri.joinPath(this.iOSRunnerFolder, stringsFileName + ".lproj/InfoPlist.strings");
         try {
             const stringsContent = await readUtf8File(stringsFile);
             const updatedContent = this.updateCFBundleDisplayName(stringsContent, value);
@@ -185,7 +185,7 @@ export class GeneratorIOS {
         if (language === 'nb') {
             language = 'no';
         }
-        var nameTxtFile = vscode.Uri.joinPath(this.iOSFastlaneMetadataFolder, language + "/name.txt");
+        const nameTxtFile = vscode.Uri.joinPath(this.iOSFastlaneMetadataFolder, language + "/name.txt");
         await vscode.workspace.fs.writeFile(nameTxtFile, new TextEncoder().encode(value.toString()));
     }
 }

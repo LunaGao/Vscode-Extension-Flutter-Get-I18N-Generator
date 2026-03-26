@@ -3,7 +3,7 @@ import { readAppi18nCSVFile, saveDartFile } from './csv_and_dart_filesystem';
 import { generateDartFile } from './generator';
 import { GeneratorIOS } from './ios/ios_generator';
 import { getOutputChannel, logError, logInfo } from './output';
-import { CsvTable } from './types';
+import type { CsvTable } from './types';
 
 const generatorConfigKey = 'conf.flutter.i18ncsv.enable';
 const generatorProgressOptions: vscode.ProgressOptions = {

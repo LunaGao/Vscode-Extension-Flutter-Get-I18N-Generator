@@ -1,19 +1,28 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
+    "env": {
+        "es2020": true,
+        "node": true,
+        "mocha": true
+    },
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "plugins": [
         "@typescript-eslint"
     ],
     "rules": {
+        "@typescript-eslint/consistent-type-imports": "warn",
         "@typescript-eslint/naming-convention": "warn",
+        "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/semi": "warn",
         "curly": "warn",
         "eqeqeq": "warn",
         "no-throw-literal": "warn",
+        "no-var": "warn",
+        "prefer-const": "warn",
         "semi": "off"
     },
     "ignorePatterns": [

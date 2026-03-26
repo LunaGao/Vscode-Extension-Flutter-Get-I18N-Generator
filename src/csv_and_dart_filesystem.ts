@@ -1,6 +1,6 @@
 import csv = require('csv');
 import * as vscode from 'vscode';
-import { CsvTable } from './types';
+import type { CsvTable } from './types';
 
 const utf8Decoder = new TextDecoder('utf-8');
 const languageHeaderPattern = /^[^|]+\|.+(?:\[[^\]]+\])?$/;
@@ -64,7 +64,7 @@ export function validateAppI18nCSVContent(content: CsvTable, options: AppI18nVal
 }
 
 export async function readAppi18nCSVFile(csvFile: vscode.Uri): Promise<CsvTable>{
-	var contents = await readUtf8File(csvFile);
+	const contents = await readUtf8File(csvFile);
 	const p = new Promise<CsvTable>(async (resolve, reject) => {
 		csv.parse(contents, { delimiter: "," }, (error, values) => {
 			if (error) {
@@ -88,7 +88,7 @@ export async function saveDartFile(fileUri: vscode.Uri, content: string) {
 }
 
 export function streamToString(stream: NodeJS.WritableStream) : Promise<string>{
-	let chunks: Uint8Array[] = [];
+	const chunks: Uint8Array[] = [];
 	return new Promise((resolve, reject) => {
 		stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
 		stream.on('error', (err) => reject(err));

@@ -1,5 +1,5 @@
 import { validateAppI18nCSVContent } from './csv_and_dart_filesystem';
-import { CsvRow, CsvTable } from './types';
+import type { CsvRow, CsvTable } from './types';
 
 type LanguageColumn = {
 	index: number;
