@@ -93,7 +93,7 @@
 涉及：`.eslintrc.json`  
 当前规则偏弱，且 `ecmaVersion` 仍是 6。建议升级为与当前 TypeScript/Node 版本匹配的配置，并加入更实用的规则，如禁止无用 `var`、要求显式错误处理、限制 `any`/宽泛对象类型。
 
-- [ ] 把公共逻辑拆成纯函数，降低 VS Code API 耦合  
+- [x] 把公共逻辑拆成纯函数，降低 VS Code API 耦合  
 涉及：`src/generator.ts`、`src/ios/ios_generator.ts`  
 目前很多逻辑和 `vscode.workspace.fs`、命令交互混在一起，不利于测试。建议把解析、映射、转义、分组等逻辑抽到无副作用函数中。
 

@@ -1,11 +1,6 @@
 import { validateAppI18nCSVContent } from './csv_and_dart_filesystem';
-import type { CsvRow, CsvTable } from './types';
-
-type LanguageColumn = {
-	index: number;
-	locale: string;
-	displayName: string;
-};
+import { getLanguageColumns, stripKeyAnnotation } from './i18n_csv';
+import type { CsvTable } from './types';
 
 function escapeDartString(value: string): string {
 	return value
@@ -17,30 +12,7 @@ function escapeDartString(value: string): string {
 		.replaceAll('$', '\\$');
 }
 
-function stripTag(value: string): string {
-	return value.replace(/\[.*\]/, '');
-}
-
-function stripKeyAnnotation(value: string): string {
-	return value.split('[')[0];
-}
-
-function getLanguageColumns(headerRow: CsvRow): LanguageColumn[] {
-	const languageColumns: LanguageColumn[] = [];
-
-	for (let index = 1; index < headerRow.length; index++) {
-		const [locale, displayName] = headerRow[index].split('|');
-		languageColumns.push({
-			index,
-			locale,
-			displayName: stripTag(displayName),
-		});
-	}
-
-	return languageColumns;
-}
-
-function buildLanguageMap(content: CsvTable, languageColumns: LanguageColumn[]): string {
+function buildLanguageMap(content: CsvTable, languageColumns: ReturnType<typeof getLanguageColumns>): string {
 	const rows = content.slice(1);
 
 	return languageColumns.map((languageColumn) => {
@@ -56,7 +28,7 @@ function buildLanguageMap(content: CsvTable, languageColumns: LanguageColumn[]):
 	}).join('\n');
 }
 
-function buildDisplayValueMap(languageColumns: LanguageColumn[]): string {
+function buildDisplayValueMap(languageColumns: ReturnType<typeof getLanguageColumns>): string {
 	return languageColumns.map((languageColumn) => {
 		return `        '${escapeDartString(languageColumn.locale)}': '${escapeDartString(languageColumn.displayName)}',`;
 	}).join('\n');
