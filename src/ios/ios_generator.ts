@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { readUtf8File, validateAppI18nCSVContent } from '../csv_and_dart_filesystem';
+import { CsvRow, CsvTable } from '../types';
 
 
 export class GeneratorIOS {
@@ -19,12 +20,12 @@ export class GeneratorIOS {
         this.iOSFastlaneMetadataFolder = vscode.Uri.joinPath(folders![0].uri, "ios/fastlane/metadata");
     }
 
-    async generateIOSRunnerI18n(value : object[]): Promise<void> {
+    async generateIOSRunnerI18n(value : CsvTable): Promise<void> {
         validateAppI18nCSVContent(value, { requireTitleRow: true });
-        let keys = value[0] as String[];
+        const keys: CsvRow = value[0];
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
-            let row = value[rowIndex] as String[];
+            const row: CsvRow = value[rowIndex];
             if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
@@ -43,7 +44,7 @@ export class GeneratorIOS {
                     var element = keys[columnIndex];
                     var keyName = element.split("|")[0].replace("_", "-");
                     if (name === keyName) {
-                        await this.saveTitleIntoStringsFile(name, (value[titleRowIndex] as String[])[columnIndex]);
+                        await this.saveTitleIntoStringsFile(name, value[titleRowIndex][columnIndex]);
                         isFound = true;
                         break;
                     }
@@ -53,7 +54,7 @@ export class GeneratorIOS {
                         var element = keys[columnIndex];
                         var keyName = element.split("|")[0].split('_')[0];
                         if (name === keyName) {
-                            await this.saveTitleIntoStringsFile(name, (value[titleRowIndex] as String[])[columnIndex]);
+                            await this.saveTitleIntoStringsFile(name, value[titleRowIndex][columnIndex]);
                             isFound = true;
                             break;
                         }
@@ -66,12 +67,12 @@ export class GeneratorIOS {
         }
     }
 
-    async generateIOSFastlaneMetadataTitle(value : object[]): Promise<void> {
+    async generateIOSFastlaneMetadataTitle(value : CsvTable): Promise<void> {
         validateAppI18nCSVContent(value, { requireTitleRow: true });
-        let keys = value[0] as String[];
+        const keys: CsvRow = value[0];
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
-            let row = value[rowIndex] as String[];
+            const row: CsvRow = value[rowIndex];
             if (row[0].split('[')[0] === 'title') {
                 titleRowIndex = rowIndex;
             }
@@ -94,7 +95,7 @@ export class GeneratorIOS {
                     var keyName = element.split("|")[0].replace("_", "-");
                     if (name === keyName) {
                         console.log(keyName + " :: " + name);
-                        await this.saveMetadataNameFile(name, (value[titleRowIndex] as String[])[columnIndex]);
+                        await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                         isFound = true;
                         break;
                     }
@@ -105,7 +106,7 @@ export class GeneratorIOS {
                         var keyName = element.split("|")[0].split('_')[0];
                         if (name === keyName) {
                             console.log(keyName + " :: " + name);
-                            await this.saveMetadataNameFile(name, (value[titleRowIndex] as String[])[columnIndex]);
+                            await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                             isFound = true;
                             break;
                         }
@@ -117,7 +118,7 @@ export class GeneratorIOS {
                         var keyName = element.split("|")[0].split('_')[0];
                         if (name.split('-')[0] === keyName) {
                             console.log(keyName + " :: " + name);
-                            await this.saveMetadataNameFile(name, (value[titleRowIndex] as String[])[columnIndex]);
+                            await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                             isFound = true;
                             break;
                         }
@@ -130,7 +131,7 @@ export class GeneratorIOS {
         }
     }
 
-    async saveTitleIntoStringsFile(stringsFileName: String, value: String) {
+    async saveTitleIntoStringsFile(stringsFileName: string, value: string) {
         var stringsFile = vscode.Uri.joinPath(this.iOSRunnerFolder, stringsFileName + ".lproj/InfoPlist.strings");
         var stringsContent = await readUtf8File(stringsFile);
         var regexp = /"CFBundleDisplayName"[ ]+=[ ]+"(.*)";/;
@@ -146,7 +147,7 @@ export class GeneratorIOS {
         }
     }
 
-    async saveMetadataNameFile(language: String, value: String) {
+    async saveMetadataNameFile(language: string, value: string) {
         if (language === 'nb') {
             language = 'no';
         }

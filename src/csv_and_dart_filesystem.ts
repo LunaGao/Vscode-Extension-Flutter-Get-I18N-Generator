@@ -1,5 +1,6 @@
 import csv = require('csv');
 import * as vscode from 'vscode';
+import { CsvTable } from './types';
 
 const utf8Decoder = new TextDecoder('utf-8');
 const languageHeaderPattern = /^[^|]+\|.+(?:\[[^\]]+\])?$/;
@@ -12,7 +13,7 @@ export async function readUtf8File(fileUri: vscode.Uri): Promise<string> {
 	return utf8Decoder.decode(await vscode.workspace.fs.readFile(fileUri));
 }
 
-export function validateAppI18nCSVContent(content: object[], options: AppI18nValidationOptions = {}): void {
+export function validateAppI18nCSVContent(content: CsvTable, options: AppI18nValidationOptions = {}): void {
 	if (content.length === 0) {
 		throw new Error('app_i18n.csv is empty.');
 	}
@@ -62,17 +63,18 @@ export function validateAppI18nCSVContent(content: object[], options: AppI18nVal
 	}
 }
 
-export async function readAppi18nCSVFile(csvFile: vscode.Uri): Promise<object[]>{
+export async function readAppi18nCSVFile(csvFile: vscode.Uri): Promise<CsvTable>{
 	var contents = await readUtf8File(csvFile);
-	const p = new Promise<object[]>(async (resolve, reject) => {
+	const p = new Promise<CsvTable>(async (resolve, reject) => {
 		csv.parse(contents, { delimiter: "," }, (error, values) => {
 			if (error) {
 				reject(error);
 				return;
 			}
 			try {
-				validateAppI18nCSVContent(values);
-				resolve(values);
+				const csvTable = values as CsvTable;
+				validateAppI18nCSVContent(csvTable);
+				resolve(csvTable);
 			} catch (validationError) {
 				reject(validationError);
 			}

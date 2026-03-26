@@ -26,7 +26,7 @@
 
 ## P1
 
-- [ ] 用明确类型替代 `object[]` 和 `String`  
+- [x] 用明确类型替代 `object[]` 和 `String`  
 涉及：几乎全部 `src/` 文件  
 建议引入统一模型，例如：
  `type CsvRow = string[]`

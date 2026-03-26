@@ -1,4 +1,5 @@
 import { validateAppI18nCSVContent } from './csv_and_dart_filesystem';
+import { CsvRow, CsvTable } from './types';
 
 function escapeDartString(value: string): string {
 	return value
@@ -10,7 +11,7 @@ function escapeDartString(value: string): string {
 		.replaceAll('$', '\\$');
 }
 
-export function generateDartFile(content: object[]): string{
+export function generateDartFile(content: CsvTable): string{
 	validateAppI18nCSVContent(content);
 	const templateFile = 'import \'package:flutter/material.dart\';\n\
 import \'package:get/get.dart\';\n\n\
@@ -69,10 +70,10 @@ class AppI18N extends Translations \{\n\
 		var currentLanguage = templateLanguage;
 		currentLanguage = currentLanguage.replace("@language", escapeDartString(language));
 		for (let rowIndex = 1; rowIndex < content.length; rowIndex++) {
-			var item = content[rowIndex] as Array<string>;
-			var currentKey = item[0] as string;
+			const item: CsvRow = content[rowIndex];
+			var currentKey = item[0];
 			currentKey = currentKey.split('[')[0];
-			var currentValue = item[columnIndex] as string;
+			var currentValue = item[columnIndex];
 			var currentKeyValue = templateKeyValue;
 			currentKeyValue = currentKeyValue.replace("@key", escapeDartString(currentKey));
             currentKeyValue = currentKeyValue.replace("@value", escapeDartString(currentValue));

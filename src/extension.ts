@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { generateDartFile } from './generator';
 import { readAppi18nCSVFile, saveDartFile } from './csv_and_dart_filesystem';
 import { GeneratorIOS } from './ios/ios_generator';
+import { CsvTable } from './types';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -30,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 					cancellable: false,
 				};
 				vscode.window.withProgress(options, async (progress, token) => {
-					var value : object[];
+					let value: CsvTable;
 					try {
 						value = await readAppi18nCSVFile(document.uri);
 					} catch (ex){
@@ -59,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 			progress.report({message: "Generating iOS i18n..."});
 			try {
 				let generateiOSI18n = new GeneratorIOS();
-				var value = await readAppi18nCSVFile(generateiOSI18n.i18nCSVFile);
+				const value = await readAppi18nCSVFile(generateiOSI18n.i18nCSVFile);
 				await generateiOSI18n.generateIOSRunnerI18n(value);
 				await generateiOSI18n.generateIOSFastlaneMetadataTitle(value);
 			} catch (ex) {
