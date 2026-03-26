@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { readUtf8File, validateAppI18nCSVContent } from '../csv_and_dart_filesystem';
+import { logError, logInfo } from '../output';
 import { CsvRow, CsvTable } from '../types';
 
 
@@ -61,7 +62,12 @@ export class GeneratorIOS {
                     }
                 }
                 if (!isFound) {
-                    throw new Error("Language not found: " + name);
+                    const error = new Error("Language not found: " + name);
+                    logError('iOS Runner Sync', error, {
+                        file: this.i18nCSVFile,
+                        details: [`Failed locale folder: ${name}`],
+                    });
+                    throw error;
                 }
             }
         }
@@ -94,7 +100,10 @@ export class GeneratorIOS {
                     var element = keys[columnIndex];
                     var keyName = element.split("|")[0].replace("_", "-");
                     if (name === keyName) {
-                        console.log(keyName + " :: " + name);
+                        logInfo('Fastlane Metadata Sync', 'Matched metadata locale.', {
+                            file: this.i18nCSVFile,
+                            details: [`Locale: ${keyName} -> ${name}`],
+                        });
                         await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                         isFound = true;
                         break;
@@ -105,7 +114,10 @@ export class GeneratorIOS {
                         var element = keys[columnIndex];
                         var keyName = element.split("|")[0].split('_')[0];
                         if (name === keyName) {
-                            console.log(keyName + " :: " + name);
+                            logInfo('Fastlane Metadata Sync', 'Matched metadata locale via language fallback.', {
+                                file: this.i18nCSVFile,
+                                details: [`Locale: ${keyName} -> ${name}`],
+                            });
                             await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                             isFound = true;
                             break;
@@ -117,7 +129,10 @@ export class GeneratorIOS {
                         var element = keys[columnIndex];
                         var keyName = element.split("|")[0].split('_')[0];
                         if (name.split('-')[0] === keyName) {
-                            console.log(keyName + " :: " + name);
+                            logInfo('Fastlane Metadata Sync', 'Matched metadata locale via region fallback.', {
+                                file: this.i18nCSVFile,
+                                details: [`Locale: ${keyName} -> ${name}`],
+                            });
                             await this.saveMetadataNameFile(name, value[titleRowIndex][columnIndex]);
                             isFound = true;
                             break;
@@ -125,7 +140,12 @@ export class GeneratorIOS {
                     }
                 }
                 if (!isFound) {
-                    throw new Error("Language not found: " + name);
+                    const error = new Error("Language not found: " + name);
+                    logError('Fastlane Metadata Sync', error, {
+                        file: this.i18nCSVFile,
+                        details: [`Failed locale folder: ${name}`],
+                    });
+                    throw error;
                 }
             }
         }
@@ -143,7 +163,12 @@ export class GeneratorIOS {
             stringsContent = stringsContent.replace(cFBundleDisplayNameString, newCFBundleDisplayNameString);
             await vscode.workspace.fs.writeFile(stringsFile, new TextEncoder().encode(stringsContent));
         } else {
-            throw new Error(stringsFile + " CFBundleDisplayName can not matched.");
+            const error = new Error(stringsFile + " CFBundleDisplayName can not matched.");
+            logError('iOS Runner Sync', error, {
+                file: stringsFile,
+                details: ['Failed module: iOS Runner Sync'],
+            });
+            throw error;
         }
     }
 

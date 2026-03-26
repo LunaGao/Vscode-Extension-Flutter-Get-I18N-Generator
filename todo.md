@@ -38,7 +38,7 @@
 涉及：`src/generator.ts`  
 当前实现可读性差，且是典型的易错字符串拼装。建议改成先构造中间数据结构，再用数组 `map/join` 输出，逻辑会更清晰，也更容易单元测试。
 
-- [ ] 提升错误输出质量，加入 `OutputChannel`  
+- [x] 提升错误输出质量，加入 `OutputChannel`  
 涉及：`src/extension.ts`、`src/ios/ios_generator.ts`  
 目前用户只能看到笼统的 `showErrorMessage()`，排查问题成本高。建议增加专用输出面板，记录：
  当前文件；
