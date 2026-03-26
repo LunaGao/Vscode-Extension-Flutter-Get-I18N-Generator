@@ -1,3 +1,5 @@
+import { validateAppI18nCSVContent } from './csv_and_dart_filesystem';
+
 function escapeDartString(value: string): string {
 	return value
 		.replaceAll('\\', '\\\\')
@@ -9,6 +11,7 @@ function escapeDartString(value: string): string {
 }
 
 export function generateDartFile(content: object[]): string{
+	validateAppI18nCSVContent(content);
 	const templateFile = 'import \'package:flutter/material.dart\';\n\
 import \'package:get/get.dart\';\n\n\
 class AppI18N extends Translations \{\n\

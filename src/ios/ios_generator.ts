@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { readUtf8File } from '../csv_and_dart_filesystem';
+import { readUtf8File, validateAppI18nCSVContent } from '../csv_and_dart_filesystem';
 
 
 export class GeneratorIOS {
@@ -20,6 +20,7 @@ export class GeneratorIOS {
     }
 
     async generateIOSRunnerI18n(value : object[]): Promise<void> {
+        validateAppI18nCSVContent(value, { requireTitleRow: true });
         let keys = value[0] as String[];
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
@@ -66,6 +67,7 @@ export class GeneratorIOS {
     }
 
     async generateIOSFastlaneMetadataTitle(value : object[]): Promise<void> {
+        validateAppI18nCSVContent(value, { requireTitleRow: true });
         let keys = value[0] as String[];
         var titleRowIndex = 0;
         for(let rowIndex = 0; rowIndex < value.length; rowIndex++ ) {
