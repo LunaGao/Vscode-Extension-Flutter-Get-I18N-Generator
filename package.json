@@ -22,14 +22,6 @@
         "title": "Flutter Enable/Disable app_i18n.csv Generator"
       },
       {
-        "command": "fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratortranslate",
-        "title": "Flutter Enable/Disable app_i18n.csv Translate"
-      },
-      {
-        "command": "fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratortranslatekeyrapidmicrosoft",
-        "title": "Flutter Set Microsoft Translate Rapid Api Key"
-      },
-      {
         "command": "fluttergeti18ngenerator.enableordisablefluttergeti18ngeneratoriosi18n",
         "title": "Flutter i18n generate iOS i18n"
       }
@@ -41,16 +33,6 @@
           "type": "boolean",
           "default": false,
           "description": "Enable or Disable auto generate the app_i18n.dart file."
-        },
-        "conf.flutter.i18ncsv.translate": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable or Disable auto translate the app_i18n.csv file."
-        },
-        "conf.flutter.i18ncsv.rapidapimicrosoft": {
-          "type": "string",
-          "default": "",
-          "description": "Set Translate Api Key by Rapid's microsoft translate."
         }
       }
     }
@@ -77,7 +59,6 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "axios": "1.12.1",
     "csv": "6.4.1"
   },
   "pricing": "Free"

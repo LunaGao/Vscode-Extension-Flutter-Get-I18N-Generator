@@ -6,7 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+- Remove CSV auto translate feature and related configuration.
 
 ## [0.0.1] - 2023-7-9
 
