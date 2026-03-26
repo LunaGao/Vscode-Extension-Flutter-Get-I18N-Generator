@@ -1,6 +1,12 @@
 import { validateAppI18nCSVContent } from './csv_and_dart_filesystem';
 import { CsvRow, CsvTable } from './types';
 
+type LanguageColumn = {
+	index: number;
+	locale: string;
+	displayName: string;
+};
+
 function escapeDartString(value: string): string {
 	return value
 		.replaceAll('\\', '\\\\')
@@ -11,77 +17,89 @@ function escapeDartString(value: string): string {
 		.replaceAll('$', '\\$');
 }
 
-export function generateDartFile(content: CsvTable): string{
-	validateAppI18nCSVContent(content);
-	const templateFile = 'import \'package:flutter/material.dart\';\n\
-import \'package:get/get.dart\';\n\n\
-class AppI18N extends Translations \{\n\
-  @override\n\
-  Map<String, Map<String, String>> get keys => \{\n\
-@list_language\n\
-      };\n\
-  Map<String, String> get key2DisplayValue => {\n\
-@list_display_value\n\
-      };\n\
-\n\
-\n\
-  Locale getSelectLocale() {\n\
-    var locale = Get.deviceLocale;\n\
-    if (locale == null) {\n\
-      return Locale(\'en\', \'US\');\n\
-    } else {\n\
-      if (locale.languageCode == \'zh\') {\n\
-        if (locale.scriptCode == \'Hant\') {\n\
-          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hant\');\n\
-        } else {\n\
-          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hans\');\n\
-        }\n\
-      }\n\
-      return locale;\n\
-    }\n\
-  }\n\
-}\n\
-';
-	const templateLanguage = '        \'@language\': {\n\
-	@item\
-			},\n\
-@list_language';
-	const templateKeyValue = '        \'@key\': \'@value\',\n\
-	@item';
-	const templateDisplayValue = '        \'@key\': \'@value\',\n\
-@list_display_value';
+function stripTag(value: string): string {
+	return value.replace(/\[.*\]/, '');
+}
 
-	var currentFile = templateFile;
-	const keys = content[0] as string[];
-	for (let index = 0; index < keys.length; index++) {
-		if (keys[index] === 'key') {continue;}
-		const language = keys[index].split('|')[0];
-		var name = keys[index].split('|')[1];
-		name = name.replace(/\[.*\]/, "");
-		var currentDisplayValue = templateDisplayValue;
-		currentDisplayValue = currentDisplayValue.replace('@key', escapeDartString(language));
-		currentDisplayValue = currentDisplayValue.replace('@value', escapeDartString(name));
-		currentFile = currentFile.replace("@list_display_value", currentDisplayValue);
+function stripKeyAnnotation(value: string): string {
+	return value.split('[')[0];
+}
+
+function getLanguageColumns(headerRow: CsvRow): LanguageColumn[] {
+	const languageColumns: LanguageColumn[] = [];
+
+	for (let index = 1; index < headerRow.length; index++) {
+		const [locale, displayName] = headerRow[index].split('|');
+		languageColumns.push({
+			index,
+			locale,
+			displayName: stripTag(displayName),
+		});
 	}
-	currentFile = currentFile.replace("\n@list_display_value", "");
-	for( let columnIndex = 0; columnIndex < keys.length ; columnIndex++ ) {
-		if(keys[columnIndex] === 'key') { continue; }
-		const language = keys[columnIndex].split('|')[0];
-		var currentLanguage = templateLanguage;
-		currentLanguage = currentLanguage.replace("@language", escapeDartString(language));
-		for (let rowIndex = 1; rowIndex < content.length; rowIndex++) {
-			const item: CsvRow = content[rowIndex];
-			var currentKey = item[0];
-			currentKey = currentKey.split('[')[0];
-			var currentValue = item[columnIndex];
-			var currentKeyValue = templateKeyValue;
-			currentKeyValue = currentKeyValue.replace("@key", escapeDartString(currentKey));
-            currentKeyValue = currentKeyValue.replace("@value", escapeDartString(currentValue));
-            currentLanguage = currentLanguage.replace("@item", currentKeyValue);
-		}
-		currentLanguage = currentLanguage.replace("@item", "");
-		currentFile = currentFile.replace("@list_language", currentLanguage);
-	}
-	currentFile = currentFile.replace("\n@list_language", "");
-	return currentFile;
+
+	return languageColumns;
+}
+
+function buildLanguageMap(content: CsvTable, languageColumns: LanguageColumn[]): string {
+	const rows = content.slice(1);
+
+	return languageColumns.map((languageColumn) => {
+		const translatedRows = rows.map((row) => {
+			return `          '${escapeDartString(stripKeyAnnotation(row[0]))}': '${escapeDartString(row[languageColumn.index])}',`;
+		}).join('\n');
+
+		return [
+			`        '${escapeDartString(languageColumn.locale)}': {`,
+			translatedRows,
+			'        },',
+		].join('\n');
+	}).join('\n');
+}
+
+function buildDisplayValueMap(languageColumns: LanguageColumn[]): string {
+	return languageColumns.map((languageColumn) => {
+		return `        '${escapeDartString(languageColumn.locale)}': '${escapeDartString(languageColumn.displayName)}',`;
+	}).join('\n');
+}
+
+export function generateDartFile(content: CsvTable): string {
+	validateAppI18nCSVContent(content);
+
+	const headerRow = content[0];
+	const languageColumns = getLanguageColumns(headerRow);
+	const languageMap = buildLanguageMap(content, languageColumns);
+	const displayValueMap = buildDisplayValueMap(languageColumns);
+
+	return [
+		'import \'package:flutter/material.dart\';',
+		'import \'package:get/get.dart\';',
+		'',
+		'class AppI18N extends Translations {',
+		'  @override',
+		'  Map<String, Map<String, String>> get keys => {',
+		languageMap,
+		'      };',
+		'  Map<String, String> get key2DisplayValue => {',
+		displayValueMap,
+		'      };',
+		'',
+		'',
+		'  Locale getSelectLocale() {',
+		'    var locale = Get.deviceLocale;',
+		'    if (locale == null) {',
+		'      return Locale(\'en\', \'US\');',
+		'    } else {',
+		'      if (locale.languageCode == \'zh\') {',
+		'        if (locale.scriptCode == \'Hant\') {',
+		'          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hant\');',
+		'        } else {',
+		'          return Locale.fromSubtags(languageCode: \'zh\', scriptCode: \'Hans\');',
+		'        }',
+		'      }',
+		'      return locale;',
+		'    }',
+		'  }',
+		'}',
+		'',
+	].join('\n');
 }

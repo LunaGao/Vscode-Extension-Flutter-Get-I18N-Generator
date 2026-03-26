@@ -34,7 +34,7 @@
  `type LocaleHeader = { locale: string; displayName: string; tags: string[] }`
 这样可以显著减少强制断言、重复 `split()` 和隐式空值问题。
 
-- [ ] 重构 `generateDartFile()`，避免模板字符串反复 `replace()`  
+- [x] 重构 `generateDartFile()`，避免模板字符串反复 `replace()`  
 涉及：`src/generator.ts`  
 当前实现可读性差，且是典型的易错字符串拼装。建议改成先构造中间数据结构，再用数组 `map/join` 输出，逻辑会更清晰，也更容易单元测试。
 
