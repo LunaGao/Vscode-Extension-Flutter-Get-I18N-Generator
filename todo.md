@@ -4,7 +4,7 @@
 
 ## P0
 
-- [ ] 修复文件读取的文本解码方式  
+- [x] 修复文件读取的文本解码方式  
 涉及：`src/csv_and_dart_filesystem.ts`、`src/ios/ios_generator.ts`  
 当前直接对 `vscode.workspace.fs.readFile()` 返回值调用 `.toString()`，这依赖运行时是否恰好返回 `Buffer`，实现上不稳。应统一改为 `new TextDecoder('utf-8').decode(bytes)` 或 `Buffer.from(bytes).toString('utf8')`，避免 CSV 和 iOS 字符串文件在不同环境下被错误解码。
 

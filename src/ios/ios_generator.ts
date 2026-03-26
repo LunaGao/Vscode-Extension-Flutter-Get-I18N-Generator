@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { readUtf8File } from '../csv_and_dart_filesystem';
 
 
 export class GeneratorIOS {
@@ -129,7 +130,7 @@ export class GeneratorIOS {
 
     async saveTitleIntoStringsFile(stringsFileName: String, value: String) {
         var stringsFile = vscode.Uri.joinPath(this.iOSRunnerFolder, stringsFileName + ".lproj/InfoPlist.strings");
-        var stringsContent = (await vscode.workspace.fs.readFile(stringsFile)).toString();
+        var stringsContent = await readUtf8File(stringsFile);
         var regexp = /"CFBundleDisplayName"[ ]+=[ ]+"(.*)";/;
         var groups = stringsContent.match(regexp);
         if (groups?.length! >= 2) {

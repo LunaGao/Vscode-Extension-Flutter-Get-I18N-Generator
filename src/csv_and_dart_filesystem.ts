@@ -1,8 +1,14 @@
 import csv = require('csv');
 import * as vscode from 'vscode';
 
+const utf8Decoder = new TextDecoder('utf-8');
+
+export async function readUtf8File(fileUri: vscode.Uri): Promise<string> {
+	return utf8Decoder.decode(await vscode.workspace.fs.readFile(fileUri));
+}
+
 export async function readAppi18nCSVFile(csvFile: vscode.Uri): Promise<object[]>{
-	var contents = (await vscode.workspace.fs.readFile(csvFile)).toString();
+	var contents = await readUtf8File(csvFile);
 	const p = new Promise<object[]>(async (resolve, reject) => {
 		csv.parse(contents, { delimiter: "," }, (error, values) => {
 			if (error) {
