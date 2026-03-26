@@ -20,7 +20,7 @@
  语言列格式是否满足 `locale|name[tag]`；
  是否存在 `title` 行。
 
-- [ ] 修复 iOS 写文件未 `await` 的异步遗漏  
+- [x] 修复 iOS 写文件未 `await` 的异步遗漏  
 涉及：`src/ios/ios_generator.ts`  
 `saveTitleIntoStringsFile()` 内部调用 `vscode.workspace.fs.writeFile()` 时没有 `await`，可能导致写入竞争、异常丢失或进度提示提前结束。
 

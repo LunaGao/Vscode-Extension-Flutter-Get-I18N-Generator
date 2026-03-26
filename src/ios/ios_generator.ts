@@ -140,7 +140,7 @@ export class GeneratorIOS {
             var preName = groups![1];
             var newCFBundleDisplayNameString = cFBundleDisplayNameString.replace(preName, value.toString());
             stringsContent = stringsContent.replace(cFBundleDisplayNameString, newCFBundleDisplayNameString);
-            vscode.workspace.fs.writeFile(stringsFile, new TextEncoder().encode(stringsContent));
+            await vscode.workspace.fs.writeFile(stringsFile, new TextEncoder().encode(stringsContent));
         } else {
             throw new Error(stringsFile + " CFBundleDisplayName can not matched.");
         }
