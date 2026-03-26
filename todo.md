@@ -65,7 +65,7 @@
 涉及：`src/ios/ios_generator.ts`  
 `/"CFBundleDisplayName"[ ]+=[ ]+"(.*)";/` 是贪婪匹配，遇到复杂字符串不稳。建议使用非贪婪匹配或逐行解析。
 
-- [ ] 清理发布包和工程元数据  
+- [x] 清理发布包和工程元数据  
 涉及：`package.json`、仓库根目录  
 当前 `repository` 与 `description` 字段语义反了，仓库里还存在 `.vsix` 二进制产物。建议：
  修正扩展元数据；
