@@ -97,7 +97,7 @@
 涉及：`src/generator.ts`、`src/ios/ios_generator.ts`  
 目前很多逻辑和 `vscode.workspace.fs`、命令交互混在一起，不利于测试。建议把解析、映射、转义、分组等逻辑抽到无副作用函数中。
 
-- [ ] 完善 README，明确 CSV 规范与异常行为  
+- [x] 完善 README，明确 CSV 规范与异常行为  
 涉及：`README.md`  
 建议补充：
  `[base]` 的精确定义；
