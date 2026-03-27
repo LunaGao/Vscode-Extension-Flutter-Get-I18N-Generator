@@ -1,7 +1,8 @@
 # fluttergeti18ngenerator 
 [![Bless](https://img.shields.io/badge/bless-God-brightgreen)](http://lunagao.github.io/BlessYourCodeTag/)
 
-published : https://marketplace.visualstudio.com/manage/publishers/lunagao/extensions/fluttergeti18ngenerator/hub
+install: https://marketplace.visualstudio.com/items?itemName=LunaGao.fluttergeti18ngenerator
+manage for developer : https://marketplace.visualstudio.com/manage/publishers/lunagao/extensions/fluttergeti18ngenerator/hub
 
 Generate app_i18n.dart file by app_i18n.csv file. For [GetX](https://pub.dev) plugin.
 You can check [here](https://pub.dev/packages/get#internationalization) to learn how to use it.
