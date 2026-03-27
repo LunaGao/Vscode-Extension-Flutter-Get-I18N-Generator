@@ -5,7 +5,7 @@ import type { CsvRow, CsvTable } from '../../types';
 suite('I18N CSV Test Suite', () => {
 	test('findTitleRowIndex finds the title row', () => {
 		const csvTable: CsvTable = [
-			['key', 'en_US|English(US)[base]'],
+			['key', 'en_US|English(US)'],
 			['welcome', 'Hello'],
 			['title', 'App Name'],
 		];
@@ -16,7 +16,7 @@ suite('I18N CSV Test Suite', () => {
 	test('findLanguageColumnMatch supports exact, language, and region matching', () => {
 		const headerRow: CsvRow = [
 			'key',
-			'en_US|English(US)[base]',
+			'en_US|English(US)',
 			'pt_BR|Português (Brasil)',
 			'zh_TW|繁體中文',
 		];

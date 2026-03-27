@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import type { CsvTable } from './types';
 
 const utf8Decoder = new TextDecoder('utf-8');
-const languageHeaderPattern = /^[^|]+\|.+(?:\[[^\]]+\])?$/;
+const languageHeaderPattern = /^[^|]+\|.+$/;
 
 type AppI18nValidationOptions = {
 	requireTitleRow?: boolean;
@@ -34,9 +34,9 @@ export function validateAppI18nCSVContent(content: CsvTable, options: AppI18nVal
 		if (typeof header !== 'string' || !languageHeaderPattern.test(header)) {
 			throw new Error(`Invalid language header at column ${columnIndex + 1}.`);
 		}
-		const [locale, displayNameWithTag] = header.split('|');
-		const displayName = displayNameWithTag.replace(/\[[^\]]+\]$/, '').trim();
-		if (locale.trim() === '' || displayName === '') {
+		const [locale, displayName] = header.split('|');
+		const trimmedDisplayName = displayName.trim();
+		if (locale.trim() === '' || trimmedDisplayName === '') {
 			throw new Error(`Invalid language header at column ${columnIndex + 1}.`);
 		}
 	}

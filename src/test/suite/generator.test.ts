@@ -3,9 +3,9 @@ import { generateDartFile } from '../../generator';
 import type { CsvTable } from '../../types';
 
 suite('Generator Test Suite', () => {
-	test('generateDartFile escapes Dart string content and strips header tags', () => {
+	test('generateDartFile escapes Dart string content and preserves header display names', () => {
 		const csvTable: CsvTable = [
-			['key', 'en_US|English(US)[base]', 'zh_TW|繁體中文'],
+			['key', 'en_US|English(US)', 'zh_TW|繁體中文'],
 			['title', 'It\'s $5\\path\nline', '標題'],
 			['welcome[key]', 'Hello', '你好'],
 		];

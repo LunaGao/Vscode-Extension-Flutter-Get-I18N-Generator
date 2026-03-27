@@ -5,11 +5,10 @@ You can check [here](https://pub.dev/packages/get#internationalization) to learn
 
 ## Example CSV File
 
-Each language column must use the format `locale|display name[tag]`.
+Each language column must use the format `locale|display name`.
 
 - `locale`: language code used in generated Dart keys, such as `en_US` or `zh_TW`
 - `display name`: label exposed in `key2DisplayValue`
-- `[tag]`: optional metadata suffix in the header text
 
 Example:
 

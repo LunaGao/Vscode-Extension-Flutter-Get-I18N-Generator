@@ -12,10 +12,6 @@ export type LanguageColumnMatch = {
 	strategy: 'exact' | 'language' | 'region';
 };
 
-export function stripHeaderTag(value: string): string {
-	return value.replace(/\[.*\]/, '');
-}
-
 export function stripKeyAnnotation(value: string): string {
 	return value.split('[')[0];
 }
@@ -28,7 +24,7 @@ export function getLanguageColumns(headerRow: CsvRow): LanguageColumn[] {
 		languageColumns.push({
 			index,
 			locale,
-			displayName: stripHeaderTag(displayName),
+			displayName,
 		});
 	}
 
