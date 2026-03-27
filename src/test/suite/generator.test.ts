@@ -18,6 +18,11 @@ suite('Generator Test Suite', () => {
 		assert.ok(result.includes('Map<String, Map<String, String>> get keys {'));
 		assert.ok(result.includes('final keys = {'));
 		assert.ok(result.includes('return keys;'));
+		assert.ok(result.includes('return const Locale(\'en\');'));
+		assert.ok(result.includes('if (locale.languageCode == \'en\') {'));
+		assert.ok(result.includes('locale.countryCode == \'TW\' ||'));
+		assert.ok(result.includes('locale.countryCode == \'HK\' ||'));
+		assert.ok(result.includes('locale.countryCode == \'MO\') {'));
 	});
 
 	test('generateDartFile adds Chinese locale aliases when script locales exist', () => {
