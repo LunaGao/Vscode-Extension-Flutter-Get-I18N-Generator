@@ -34,6 +34,20 @@ function buildDisplayValueMap(languageColumns: ReturnType<typeof getLanguageColu
 	}).join('\n');
 }
 
+function buildLanguageAliasAssignments(languageColumns: ReturnType<typeof getLanguageColumns>): string[] {
+	const aliases: string[] = [];
+	const locales = new Set(languageColumns.map((languageColumn) => languageColumn.locale));
+
+	if (locales.has('zh_Hans')) {
+		aliases.push('    keys[\'zh_CN\'] = keys[\'zh_Hans\']!;');
+	}
+	if (locales.has('zh_Hant')) {
+		aliases.push('    keys[\'zh_TW\'] = keys[\'zh_Hant\']!;');
+	}
+
+	return aliases;
+}
+
 export function generateDartFile(content: CsvTable): string {
 	validateAppI18nCSVContent(content);
 
@@ -41,16 +55,23 @@ export function generateDartFile(content: CsvTable): string {
 	const languageColumns = getLanguageColumns(headerRow);
 	const languageMap = buildLanguageMap(content, languageColumns);
 	const displayValueMap = buildDisplayValueMap(languageColumns);
+	const languageAliases = buildLanguageAliasAssignments(languageColumns);
 
 	return [
+		'// GENERATED CODE - DO NOT MODIFY BY HAND',
+		'',
 		'import \'package:flutter/material.dart\';',
 		'import \'package:get/get.dart\';',
 		'',
 		'class AppI18N extends Translations {',
 		'  @override',
-		'  Map<String, Map<String, String>> get keys => {',
+		'  Map<String, Map<String, String>> get keys {',
+		'    final keys = {',
 		languageMap,
-		'      };',
+		'    };',
+		...languageAliases,
+		'    return keys;',
+		'  }',
 		'  Map<String, String> get key2DisplayValue => {',
 		displayValueMap,
 		'      };',

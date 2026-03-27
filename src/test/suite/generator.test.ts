@@ -15,5 +15,20 @@ suite('Generator Test Suite', () => {
 		assert.ok(result.includes('\'en_US\': \'English(US)\','));
 		assert.ok(result.includes('\'title\': \'It\\\'s \\$5\\\\path\\nline\','));
 		assert.ok(result.includes('\'welcome\': \'Hello\','));
+		assert.ok(result.includes('Map<String, Map<String, String>> get keys {'));
+		assert.ok(result.includes('final keys = {'));
+		assert.ok(result.includes('return keys;'));
+	});
+
+	test('generateDartFile adds Chinese locale aliases when script locales exist', () => {
+		const csvTable: CsvTable = [
+			['key', 'en|English', 'zh_Hans|简体中文', 'zh_Hant|繁體中文'],
+			['title', 'Title', '标题', '標題'],
+		];
+
+		const result = generateDartFile(csvTable);
+
+		assert.ok(result.includes('keys[\'zh_CN\'] = keys[\'zh_Hans\']!;'));
+		assert.ok(result.includes('keys[\'zh_TW\'] = keys[\'zh_Hant\']!;'));
 	});
 });
