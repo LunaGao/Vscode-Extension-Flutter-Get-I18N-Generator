@@ -4,12 +4,8 @@ import type { CsvTable } from './types';
 
 function escapeDartString(value: string): string {
 	return value
-		.replaceAll('\\', '\\\\')
-		.replaceAll('\'', '\\\'')
-		.replaceAll('\r', '\\r')
-		.replaceAll('\n', '\\n')
-		.replaceAll('\t', '\\t')
-		.replaceAll('$', '\\$');
+		// .replaceAll('\\', '\\\\')
+		.replaceAll('\'', '\\\'');
 }
 
 function buildLanguageMap(content: CsvTable, languageColumns: ReturnType<typeof getLanguageColumns>): string {
