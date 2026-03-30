@@ -61,6 +61,7 @@ Include if your extension adds any VS Code settings through the `fluttergeti18ng
 [publish](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 
 manage for developer : https://marketplace.visualstudio.com/manage/publishers/lunagao/extensions/fluttergeti18ngenerator/hub
+manage for developer upload: https://marketplace.visualstudio.com/manage/publishers/lunagao
 
 ## Known Issues
 
