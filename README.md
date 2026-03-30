@@ -2,7 +2,6 @@
 [![Bless](https://img.shields.io/badge/bless-God-brightgreen)](http://lunagao.github.io/BlessYourCodeTag/)
 
 install: https://marketplace.visualstudio.com/items?itemName=LunaGao.fluttergeti18ngenerator
-manage for developer : https://marketplace.visualstudio.com/manage/publishers/lunagao/extensions/fluttergeti18ngenerator/hub
 
 Generate app_i18n.dart file by app_i18n.csv file. For [GetX](https://pub.dev) plugin.
 You can check [here](https://pub.dev/packages/get#internationalization) to learn how to use it.
@@ -60,6 +59,8 @@ Include if your extension adds any VS Code settings through the `fluttergeti18ng
 
 ## For developer
 [publish](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+
+manage for developer : https://marketplace.visualstudio.com/manage/publishers/lunagao/extensions/fluttergeti18ngenerator/hub
 
 ## Known Issues
 

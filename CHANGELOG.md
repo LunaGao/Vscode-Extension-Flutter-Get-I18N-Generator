@@ -8,6 +8,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - No unreleased changes yet.
 
+## [0.2.1] - 2026-03-30
+
+- Add escape generated Dart strings more safely.
 ## [0.2.0] - 2026-03-27
 
 ### Removed
