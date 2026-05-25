@@ -1,3 +1,5 @@
+Not Support. Use [flutter_getx_i18n](https://github.com/LunaGao/flutter_getx_i18n) insteaded.
+
 # fluttergeti18ngenerator 
 [![Bless](https://img.shields.io/badge/bless-God-brightgreen)](http://lunagao.github.io/BlessYourCodeTag/)
 
